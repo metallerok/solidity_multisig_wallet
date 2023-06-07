@@ -44,7 +44,7 @@ contract MultiSigWallet {
     }
     
     modifier notExecuted(uint _txId) {
-        require(!transactions[_txId].executed, "Tx already approved");
+        require(!transactions[_txId].executed, "Tx already executed");
         _;
     }
 
@@ -78,6 +78,8 @@ contract MultiSigWallet {
     }
 
     function submitTransaction(address _to, uint _value, bytes calldata _data) external onlyOwner {
+        uint txId = transactions.length;
+
         transactions.push(
             Transaction({
                 to: _to,
@@ -89,7 +91,7 @@ contract MultiSigWallet {
         );
 
         emit TxSubmited({
-            txId: transactions.length,
+            txId: txId,
             owner: msg.sender,
             to: _to,
             value: _value,
@@ -114,7 +116,7 @@ contract MultiSigWallet {
         transaction.executed = true;
         (bool success, ) = transaction.to.call{value: transaction.value}(transaction.data);
 
-        require(success, "tx failed");
+        require(success, "Tx failed");
 
         emit TxExecuted(msg.sender, _txId);
     }
