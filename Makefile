@@ -16,4 +16,4 @@ console:
 	npx hardhat console
 
 testnet_deploy:
-	npx hardhat run scripts/deploy.js
+	npx hardhat run scripts/testnet_deploy.js
