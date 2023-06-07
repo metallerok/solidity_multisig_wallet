@@ -129,4 +129,32 @@ contract MultiSigWallet {
 
         emit TxRevoked(msg.sender, _txId);
     }
+
+    function getOwners() public view returns(address[] memory) {
+        return owners;
+    }
+
+    function getTransactionsCount() public view returns (uint) {
+        return transactions.length;
+    }
+
+    function getTransaction(
+        uint _txId
+    ) public view returns (
+        address to, 
+        uint value, 
+        bytes memory data, 
+        bool executed, 
+        uint numConfirmations
+    ) {
+        Transaction storage transaction = transactions[_txId];
+
+        return (
+            transaction.to,
+            transaction.value,
+            transaction.data,
+            transaction.executed,
+            transaction.numConfirmations
+        );
+    }
 }
